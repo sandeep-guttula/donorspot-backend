@@ -16,7 +16,7 @@ const addressType = new GraphQLObjectType({
   name: "Address",
   fields: () => ({
     city: { type: GraphQLString },
-    zip: { type: GraphQLString },
+    pincode: { type: GraphQLString },
   }),
 });
 
@@ -110,7 +110,7 @@ const mutation = new GraphQLObjectType({
         gender: { type: new GraphQLNonNull(GraphQLString) },
         bloodType: { type: new GraphQLNonNull(GraphQLString) },
         city: { type: new GraphQLNonNull(GraphQLString) },
-        zip: { type: new GraphQLNonNull(GraphQLString) },
+        pincode: { type: new GraphQLNonNull(GraphQLString) },
       },
       resolve(parent, args) {
         // Check if any of the fields are empty
@@ -123,7 +123,7 @@ const mutation = new GraphQLObjectType({
             args.bloodType,
             args.gender,
             args.city,
-            args.zip,
+            args.pincode,
           ].some((field) => field?.trim() === "")
         ) {
           throw new ApiError("All fields are required", 400);
@@ -150,7 +150,7 @@ const mutation = new GraphQLObjectType({
           gender: args.gender,
           address: {
             city: args.city,
-            zip: args.zip,
+            pincode: args.pincode,
           },
         });
 
