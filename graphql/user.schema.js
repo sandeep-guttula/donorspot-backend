@@ -16,8 +16,6 @@ const addressType = new GraphQLObjectType({
   name: "Address",
   fields: () => ({
     city: { type: GraphQLString },
-    state: { type: GraphQLString },
-    country: { type: GraphQLString },
     zip: { type: GraphQLString },
   }),
 });
@@ -47,10 +45,8 @@ const UserType = new GraphQLObjectType({
     firebaseUID: { type: GraphQLString },
     fullName: { type: GraphQLString },
     email: { type: GraphQLString },
-    password: { type: GraphQLString },
     phone: { type: GraphQLString },
     age: { type: GraphQLString },
-    dob: { type: GraphQLString },
     bloodType: { type: GraphQLString },
     activeForDonation: { type: GraphQLBoolean },
     address: { type: addressType },
@@ -109,15 +105,11 @@ const mutation = new GraphQLObjectType({
         firebaseUID: { type: new GraphQLNonNull(GraphQLString) },
         fullName: { type: new GraphQLNonNull(GraphQLString) },
         email: { type: new GraphQLNonNull(GraphQLString) },
-        password: { type: new GraphQLNonNull(GraphQLString) },
         phone: { type: new GraphQLNonNull(GraphQLString) },
         age: { type: new GraphQLNonNull(GraphQLString) },
-        dob: { type: new GraphQLNonNull(GraphQLString) },
         gender: { type: new GraphQLNonNull(GraphQLString) },
         bloodType: { type: new GraphQLNonNull(GraphQLString) },
         city: { type: new GraphQLNonNull(GraphQLString) },
-        state: { type: new GraphQLNonNull(GraphQLString) },
-        country: { type: new GraphQLNonNull(GraphQLString) },
         zip: { type: new GraphQLNonNull(GraphQLString) },
       },
       resolve(parent, args) {
@@ -126,15 +118,11 @@ const mutation = new GraphQLObjectType({
           [
             args.fullName,
             args.email,
-            args.password,
             args.phone,
             args.age,
-            args.dob,
             args.bloodType,
             args.gender,
             args.city,
-            args.state,
-            args.country,
             args.zip,
           ].some((field) => field?.trim() === "")
         ) {
@@ -156,16 +144,12 @@ const mutation = new GraphQLObjectType({
           firebaseUID: args.firebaseUID,
           fullName: args.fullName,
           email: args.email,
-          password: args.password,
           phone: args.phone,
           age: args.age,
-          dob: args.dob,
           bloodType: args.bloodType,
           gender: args.gender,
           address: {
             city: args.city,
-            state: args.state,
-            country: args.country,
             zip: args.zip,
           },
         });

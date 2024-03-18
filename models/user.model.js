@@ -22,10 +22,6 @@ const userSchema = new Schema({
     trim: true,
     index: true,
   },
-  password: {
-    type: String,
-    required: [true, "Password is required"],
-  },
   token: {
     type: String,
   },
@@ -37,10 +33,6 @@ const userSchema = new Schema({
   },
   age: {
     type: String,
-    required: true,
-  },
-  dob: {
-    type: Date,
     required: true,
   },
   bloodType: {
@@ -55,12 +47,6 @@ const userSchema = new Schema({
 
   address: {
     city: {
-      type: String,
-    },
-    state: {
-      type: String,
-    },
-    country: {
       type: String,
     },
     pincode: {
