@@ -129,17 +129,7 @@ const mutation = new GraphQLObjectType({
           throw new ApiError("All fields are required", 400);
         }
         console.log(args);
-        // check if user exists
-        // const { email, phone } = args;
-        // const existedUser = User.findOne({
-        //   $or: [{ email }, { phone }],
-        // });
-        // console.log(existedUser);
-        // if (existedUser) {
-        //   throw new ApiError(409, "User already exists");
-        // }
 
-        // create user object
         const user = new User({
           firebaseUID: args.firebaseUID,
           fullName: args.fullName,
@@ -160,23 +150,37 @@ const mutation = new GraphQLObjectType({
         return user.save();
       },
     },
-    login: {
+    // login: {
+    //   type: UserType,
+    //   args: {
+    //     email: { type: new GraphQLNonNull(GraphQLString) },
+    //     password: { type: new GraphQLNonNull(GraphQLString) },
+    //   },
+    //   resolve(parent, { email, password }) {
+    //     if (email === "" || password === "") {
+    //       throw new ApiError("All fields are required", 400);
+    //     }
+    //     const user = User.findOne({
+    //       email,
+    //       password,
+    //     }).select("-password");
+
+    //     console.log(user);
+    //     return user;
+    //   },
+    // },
+    updateActiveForDonation: {
       type: UserType,
       args: {
-        email: { type: new GraphQLNonNull(GraphQLString) },
-        password: { type: new GraphQLNonNull(GraphQLString) },
+        id: { type: new GraphQLNonNull(GraphQLID) },
+        activeForDonation: { type: new GraphQLNonNull(GraphQLBoolean) },
       },
-      resolve(parent, { email, password }) {
-        if (email === "" || password === "") {
-          throw new ApiError("All fields are required", 400);
-        }
-        const user = User.findOne({
-          email,
-          password,
-        }).select("-password");
-
-        console.log(user);
-        return user;
+      resolve(parent, args) {
+        return User.findByIdAndUpdate(
+          args.id,
+          { activeForDonation: args.activeForDonation },
+          { new: true }
+        );
       },
     },
   },
