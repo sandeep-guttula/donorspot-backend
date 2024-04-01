@@ -1,4 +1,4 @@
-import { PreviousDonation } from "../models/donation.model.js";
+import { PreviousDonation, Donation } from "../models/donation.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import {
   GraphQLObjectType,
@@ -63,6 +63,20 @@ const UserType = new GraphQLObjectType({
   }),
 });
 
+const DonationType = new GraphQLObjectType({
+  name: "Donation",
+  fields: () => ({
+    id: { type: GraphQLID },
+    userId: { type: GraphQLID },
+    receiverId: { type: GraphQLID },
+    donationDate: { type: GraphQLString },
+    donationType: { type: GraphQLString },
+  }),
+});
+
+
+
+
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
   fields: {
@@ -93,6 +107,19 @@ const RootQuery = new GraphQLObjectType({
         return User.find({});
       },
     },
+    donations: {
+      type: new GraphQLList(DonationType),
+      resolve(parent, args) {
+        return Donation.find();
+      },
+    },
+    donation: {
+      type: DonationType,
+      args: { id: { type: GraphQLID } },
+      resolve(parent, args) {
+        return Donation.findById(args.id);
+      },
+    },    
   },
 });
 
@@ -150,25 +177,6 @@ const mutation = new GraphQLObjectType({
         return user.save();
       },
     },
-    // login: {
-    //   type: UserType,
-    //   args: {
-    //     email: { type: new GraphQLNonNull(GraphQLString) },
-    //     password: { type: new GraphQLNonNull(GraphQLString) },
-    //   },
-    //   resolve(parent, { email, password }) {
-    //     if (email === "" || password === "") {
-    //       throw new ApiError("All fields are required", 400);
-    //     }
-    //     const user = User.findOne({
-    //       email,
-    //       password,
-    //     }).select("-password");
-
-    //     console.log(user);
-    //     return user;
-    //   },
-    // },
     updateActiveForDonation: {
       type: UserType,
       args: {
@@ -181,6 +189,35 @@ const mutation = new GraphQLObjectType({
           { activeForDonation: args.activeForDonation },
           { new: true }
         );
+      },
+    },
+    addDonation: {
+      type: DonationType,
+      args: {
+        userId: { type: new GraphQLNonNull(GraphQLID) },
+        receiverId: { type: new GraphQLNonNull(GraphQLID) },
+        donationDate: { type: new GraphQLNonNull(GraphQLString) },
+        donationType: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      resolve(parent, args) {
+        if (
+          [
+            args.donationType,
+            args.receiverId,
+            args.donationDate,
+            args.userId,
+          ].some((field) => field.trim() === "")
+        ) {
+          throw new ApiError(400, "All fields are required");
+        }
+
+        const donation = new Donation({
+          userId: args.userId,
+          receiverId: args.receiverId,
+          donationDate: args.donationDate,
+          donationType: args.donationType,
+        });
+        return donation.save();
       },
     },
   },

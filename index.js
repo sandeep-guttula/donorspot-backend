@@ -5,6 +5,7 @@ import { PORT } from "./SECRET.js";
 import { connectDB } from "./config/db.js";
 import schema from "./graphql/user.schema.js";
 
+
 connectDB();
 const app = express();
 app.use(cors());
