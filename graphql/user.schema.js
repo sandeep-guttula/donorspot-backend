@@ -74,9 +74,6 @@ const DonationType = new GraphQLObjectType({
   }),
 });
 
-
-
-
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
   fields: {
@@ -119,7 +116,7 @@ const RootQuery = new GraphQLObjectType({
       resolve(parent, args) {
         return Donation.findById(args.id);
       },
-    },    
+    },
   },
 });
 
@@ -191,6 +188,42 @@ const mutation = new GraphQLObjectType({
         );
       },
     },
+
+    // Add user coords
+    // Add user coords
+    addUserCoords: {
+      type: UserType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLID) },
+        lat: { type: new GraphQLNonNull(GraphQLString) },
+        lng: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      async resolve(parent, args) {
+        const { id, lat, lng } = args;
+
+        // Check if user ID is valid
+        const existingUser = await User.findById(id);
+        if (!existingUser) {
+          throw new ApiError("User not found", 404);
+        }
+
+        // Update user coordinates
+        existingUser.coords = {
+          lat,
+          lng,
+        };
+
+        // Save and return updated user
+        try {
+          const updatedUser = await existingUser.save();
+
+          return updatedUser;
+        } catch (error) {
+          throw new ApiError("Error updating user coordinates", 500);
+        }
+      },
+    },
+
     addDonation: {
       type: DonationType,
       args: {

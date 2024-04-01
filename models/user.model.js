@@ -52,13 +52,13 @@ const userSchema = new Schema({
     pincode: {
       type: String,
     },
-    coords: {
-      lat: {
-        type: Number,
-      },
-      lng: {
-        type: Number,
-      },
+  },
+  coords: {
+    lat: {
+      type: Number,
+    },
+    lng: {
+      type: Number,
     },
   },
 
