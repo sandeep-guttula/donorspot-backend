@@ -128,6 +128,15 @@ const RootQuery = new GraphQLObjectType({
       resolve(parent, args) {
         return Donation.find({ city: args.city });
       },
+    },
+    donationRequestsForYou: {
+      type: new GraphQLList(DonationType),
+      args: {
+        receiverId: { type: new GraphQLNonNull(GraphQLID) },
+      },
+      resolve(parent, args) {
+        return Donation.find({ receiverId: args.receiverId });
+      },
     }
   },
 });
