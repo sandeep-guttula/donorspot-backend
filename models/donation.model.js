@@ -73,14 +73,27 @@ const donationSchema = new Schema({
     ref: "User",
   },
   donationDate: {
-    type: Date,
+    type: String,
     required: true,
+  },
+  city: {
+    type: String,
   },
   donationType: {
     type: String,
-    enum: ["previous-donation", "request-donation", "request-for-donor"],
+    enum: ["previous-donation", "request-for-donor","request-in-your-area"],
     required: true,
   },
+  status: {
+    type: String,
+    enum: ["pending", "completed", "cancelled"],
+    default: "pending",
+  },
 })
+
+
+// previous-donation = previous-donation,
+// request-for-donor = "send individual request to user through maps",
+// request-in-your-area= "Request for donor in your area"
 
 export const Donation = mongoose.model("Donation", donationSchema);

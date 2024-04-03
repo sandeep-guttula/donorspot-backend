@@ -20,6 +20,7 @@ const DonationType = new GraphQLObjectType({
     receiverId: { type: GraphQLID },
     donationDate: { type: GraphQLString },
     donationType: { type: GraphQLString },
+    city: { type: GraphQLString },
   }),
 });
 
@@ -52,6 +53,7 @@ const DonationMutation = new GraphQLObjectType({
         receiverId: { type: new GraphQLNonNull(GraphQLID) },
         donationDate: { type: new GraphQLNonNull(GraphQLString) },
         donationType: { type: new GraphQLNonNull(GraphQLString) },
+        city: { type: new GraphQLNonNull(GraphQLString) },
       },
       resolve(parent, args) {
 
@@ -59,7 +61,8 @@ const DonationMutation = new GraphQLObjectType({
             args.donationType,
             args.receiverId,
             args.donationDate,
-            args.userId
+            args.userId,
+            args.city
         ].some((field) => field.trim() === "")) {
             throw new ApiError(400, "All fields are required");
         }
@@ -69,6 +72,7 @@ const DonationMutation = new GraphQLObjectType({
           receiverId: args.receiverId,
           donationDate: args.donationDate,
           donationType: args.donationType,
+          city: args.city,
         });
         return donation.save();
       },
@@ -81,6 +85,7 @@ const DonationMutation = new GraphQLObjectType({
         receiverId: { type: new GraphQLNonNull(GraphQLID) },
         donationDate: { type: new GraphQLNonNull(GraphQLString) },
         donationType: { type: new GraphQLNonNull(GraphQLString) },
+        city: { type: new GraphQLNonNull(GraphQLString) },
       },
       resolve(parent, args) {
         return Donation.findByIdAndUpdate(

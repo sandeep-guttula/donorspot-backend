@@ -71,6 +71,8 @@ const DonationType = new GraphQLObjectType({
     receiverId: { type: GraphQLID },
     donationDate: { type: GraphQLString },
     donationType: { type: GraphQLString },
+    city: { type: GraphQLString },
+    status: { type: GraphQLString },
   }),
 });
 
@@ -117,6 +119,15 @@ const RootQuery = new GraphQLObjectType({
         return Donation.findById(args.id);
       },
     },
+    donationsInYourArea: {
+      type: new GraphQLList(DonationType),
+      args: {
+        city: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      resolve(parent, args) {
+        return Donation.find({ city: args.city });
+      },
+    }
   },
 });
 
@@ -228,20 +239,21 @@ const mutation = new GraphQLObjectType({
       type: DonationType,
       args: {
         userId: { type: new GraphQLNonNull(GraphQLID) },
-        receiverId: { type: new GraphQLNonNull(GraphQLID) },
+        receiverId: { type: GraphQLString },
         donationDate: { type: new GraphQLNonNull(GraphQLString) },
         donationType: { type: new GraphQLNonNull(GraphQLString) },
+        city: { type: GraphQLString },
+        status: { type: GraphQLString, defaultValue: "pending" },
       },
       resolve(parent, args) {
         if (
           [
             args.donationType,
-            args.receiverId,
             args.donationDate,
             args.userId,
           ].some((field) => field.trim() === "")
         ) {
-          throw new ApiError(400, "All fields are required");
+          throw new ApiError(400, " donationType, donationDate, userId are required");
         }
 
         const donation = new Donation({
@@ -249,6 +261,7 @@ const mutation = new GraphQLObjectType({
           receiverId: args.receiverId,
           donationDate: args.donationDate,
           donationType: args.donationType,
+          city: args.city,
         });
         return donation.save();
       },
