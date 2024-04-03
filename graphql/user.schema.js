@@ -73,6 +73,7 @@ const DonationType = new GraphQLObjectType({
     donationType: { type: GraphQLString },
     city: { type: GraphQLString },
     status: { type: GraphQLString },
+    bloodType: { type: GraphQLString },
   }),
 });
 
@@ -242,6 +243,7 @@ const mutation = new GraphQLObjectType({
         receiverId: { type: GraphQLString },
         donationDate: { type: new GraphQLNonNull(GraphQLString) },
         donationType: { type: new GraphQLNonNull(GraphQLString) },
+        bloodType: { type: new GraphQLNonNull(GraphQLString) },
         city: { type: GraphQLString },
         status: { type: GraphQLString, defaultValue: "pending" },
       },
@@ -250,6 +252,7 @@ const mutation = new GraphQLObjectType({
           [
             args.donationType,
             args.donationDate,
+            args.bloodType,
             args.userId,
           ].some((field) => field.trim() === "")
         ) {
@@ -261,6 +264,7 @@ const mutation = new GraphQLObjectType({
           receiverId: args.receiverId,
           donationDate: args.donationDate,
           donationType: args.donationType,
+          bloodType: args.bloodType,
           city: args.city,
         });
         return donation.save();

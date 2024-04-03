@@ -84,6 +84,11 @@ const donationSchema = new Schema({
     enum: ["previous-donation", "request-for-donor","request-in-your-area"],
     required: true,
   },
+  bloodType: {
+    type: String,
+    enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
+    required: true,
+  },
   status: {
     type: String,
     enum: ["pending", "completed", "cancelled"],
