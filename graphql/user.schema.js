@@ -279,6 +279,27 @@ const mutation = new GraphQLObjectType({
         return donation.save();
       },
     },
+    deleteDonation: {
+      type: DonationType,
+      args: { id: { type: new GraphQLNonNull(GraphQLID) } },
+      resolve(parent, args) {
+        return Donation.findByIdAndDelete(args.id);
+      },
+    },
+    changeDonationStatus: {
+      type: DonationType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLID) },
+        status: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      resolve(parent, args) {
+        return Donation.findByIdAndUpdate(
+          args.id,
+          { status: args.status },
+          { new: true }
+        );
+      },
+    },
   },
 });
 
