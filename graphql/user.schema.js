@@ -300,6 +300,58 @@ const mutation = new GraphQLObjectType({
         );
       },
     },
+    updateName: {
+      type: UserType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLID) },
+        fullName: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      resolve(parent, args) {
+        return User.findByIdAndUpdate(
+          args.id,
+          { fullName: args.fullName },
+          { new: true }
+        );
+      },
+    },
+    updateAge: {
+      type: UserType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLID) },
+        age: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      resolve(parent, args) {
+        return User.findByIdAndUpdate(args.id, { age: args.age }, { new: true });
+      },
+    },
+    updateBloodType: {
+      type: UserType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLID) },
+        bloodType: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      resolve(parent, args) {
+        return User.findByIdAndUpdate(
+          args.id,
+          { bloodType: args.bloodType },
+          { new: true }
+        );
+      },
+    },
+    updateCity:{
+      type: UserType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLID) },
+        city: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      resolve(parent, args) {
+        return User.findByIdAndUpdate(
+          args.id,
+          { city: args.city },
+          { new: true }
+        );
+      },
+    },
   },
 });
 
