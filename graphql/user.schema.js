@@ -279,50 +279,23 @@ const mutation = new GraphQLObjectType({
         return donation.save();
       },
     },
-    updateAge: {
-      type: UserType,
-      args: {
-        id: { type: new GraphQLNonNull(GraphQLID) },
-        age: { type: new GraphQLNonNull(GraphQLString) },
-      },
+    deleteDonation: {
+      type: DonationType,
+      args: { id: { type: new GraphQLNonNull(GraphQLID) } },
       resolve(parent, args) {
-        return User.findByIdAndUpdate(args.id, { age: args.age }, { new: true });
+        return Donation.findByIdAndDelete(args.id);
       },
     },
-    updateBloodType: {
-      type: UserType,
+    changeDonationStatus: {
+      type: DonationType,
       args: {
         id: { type: new GraphQLNonNull(GraphQLID) },
-        bloodType: { type: new GraphQLNonNull(GraphQLString) },
+        status: { type: new GraphQLNonNull(GraphQLString) },
       },
       resolve(parent, args) {
-        return User.findByIdAndUpdate(
+        return Donation.findByIdAndUpdate(
           args.id,
-          { bloodType: args.bloodType },
-          { new: true }
-        );
-      },
-    },
-    updateCity: {
-      type: UserType,
-      args: {
-        id: { type: new GraphQLNonNull(GraphQLID) },
-        city: { type: new GraphQLNonNull(GraphQLString) },
-      },
-      resolve(parent, args) {
-        return User.findByIdAndUpdate(args.id, { city: args.city }, { new: true });
-      },
-    },
-    updatePincode: {
-      type: UserType,
-      args: {
-        id: { type: new GraphQLNonNull(GraphQLID) },
-        pincode: { type: new GraphQLNonNull(GraphQLString) },
-      },
-      resolve(parent, args) {
-        return User.findByIdAndUpdate(
-          args.id,
-          { pincode: args.pincode },
+          { status: args.status },
           { new: true }
         );
       },
